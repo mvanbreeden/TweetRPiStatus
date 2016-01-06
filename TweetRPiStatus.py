@@ -79,4 +79,5 @@ if __name__ == "__main__":
         # tweet the sys info
         api.update_status(sysInfoString) #Tweet status
     except:
+        print('Exited on exception!')
         exit()
