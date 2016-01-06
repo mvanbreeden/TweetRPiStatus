@@ -53,33 +53,35 @@ def getDiskSpace():
 
 #Main program
 if __name__ == "__main__":
-    ramInfo=getRAMinfo()
-    usedMem=int(ramInfo[1])
-    freeMem=int(ramInfo[2])
+    ramInfo = getRAMinfo()
+    usedMem = int(ramInfo[1])
+    freeMem = int(ramInfo[2])
     #calculate the free memory percentage
-    freeMemPerc=int((float(freeMem)/(usedMem+freeMem))*100)
+    freeMemPerc = int((float(freeMem)/(usedMem+freeMem))*100)
     #get hostname
     hostname = os.popen('hostname').readline().rstrip()
     #build the info string
-    sysInfoString= hostname + ": CPUTemp " + getCPUtemperature() + ", CPU U " + getCPUuse()+ "%, FreeDisk " + getDiskSpace()[2] + ", FreeMemPrc " + str(freeMemPerc) + "%"
+    sysInfoString = hostname + ": CPUTemp " + getCPUtemperature() + ", CPU U " + getCPUuse()+ "%, FreeDisk " + getDiskSpace()[2] + ", FreeMemPrc " + str(freeMemPerc) + "%"
     #print(sysInfoString)
 
     #read config file for twitter keys (so not to include them on github)
     try:
         config = ConfigParser.ConfigParser()
-        if config.read("~/.twitter.conf"):
-            #get options from section
-            options = config.options('TwitterAccount')
-            print(options[1])
+        if config.read('/etc/init/twitter.conf'):
+            consumer_key = config.get('TwitterAccount','consumer_key')
+            consumer_secret = config.get('TwitterAccount','consumer_secret')
+            access_key = config.get('TwitterAccount','access_key')
+            access_secret = config.get('TwitterAccount','access_secret')
+
             #Initialise Twitter API
-            auth = tweepy.OAuthHandler(options[1], options[2])
-            auth.set_access_token(options[3], options[4])
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_key, access_secret)
             api = tweepy.API(auth)
 
             # tweet the sys info
             api.update_status(sysInfoString) #Tweet status
         else:
             print('Error reading config file')
-    except:
-        print('Exited on exception!')
+    except Exception:
+        print(Exception)
         exit()
