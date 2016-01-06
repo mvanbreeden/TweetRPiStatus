@@ -67,17 +67,19 @@ if __name__ == "__main__":
     #read config file for twitter keys (so not to include them on github)
     try:
         config = ConfigParser.ConfigParser()
-        config.read("~/.twitter.conf")
-        #get options from section
-        options = config.options('TwitterAccount')
+        if config.read("~/.twitter.conf"):
+            #get options from section
+            options = config.options('TwitterAccount')
+            print(options[1])
+            #Initialise Twitter API
+            auth = tweepy.OAuthHandler(options[1], options[2])
+            auth.set_access_token(options[3], options[4])
+            api = tweepy.API(auth)
 
-        #Initialise Twitter API
-        auth = tweepy.OAuthHandler(options[1], options[2])
-        auth.set_access_token(options[3], options[4])
-        api = tweepy.API(auth)
-
-        # tweet the sys info
-        api.update_status(sysInfoString) #Tweet status
+            # tweet the sys info
+            api.update_status(sysInfoString) #Tweet status
+        else:
+            print('Error reading config file')
     except:
         print('Exited on exception!')
         exit()
