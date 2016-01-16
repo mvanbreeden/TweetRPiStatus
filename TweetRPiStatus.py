@@ -1,10 +1,23 @@
 #!/usr/bin/env python
+# Copyright (c) 2016 Marcel van Breeden
+#
+# This is free software: you can redistribute it and/or modify
+# it under the terms of the added License file.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# I re-used routines for system info, modified them, but not sure of the source.
+# Otherwise would be mentioned here.
+#
 
 import sys
 import os
 import tweepy
 import ConfigParser
 
+# for possible use in cron or other scripts
 os.environ['TERM'] = "xterm"
 
 # Return CPU temperature as a float
